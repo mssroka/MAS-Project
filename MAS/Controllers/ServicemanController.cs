@@ -13,7 +13,7 @@ public class ServicemanController : ControllerBase
         _servicemanService = servicemanService;
     }
 
-    [HttpGet]
+    [HttpGet("{skill}")]
     public async Task<IActionResult> GetServicemenBySkill(int skill)
     {
         return Ok(await _servicemanService.GetServicemenBySkill(skill));

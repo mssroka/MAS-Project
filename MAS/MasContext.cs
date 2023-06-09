@@ -59,7 +59,6 @@ public partial class MasContext : DbContext
             entity.ToTable("Car");
 
             entity.Property(e => e.IdCar)
-                .ValueGeneratedNever()
                 .HasColumnName("idCar");
             entity.Property(e => e.Brand)
                 .HasMaxLength(30)
@@ -132,7 +131,6 @@ public partial class MasContext : DbContext
             entity.ToTable("Element");
 
             entity.Property(e => e.IdElement)
-                .ValueGeneratedNever()
                 .HasColumnName("idElement");
             entity.Property(e => e.Cost).HasColumnName("cost");
             entity.Property(e => e.Name)
@@ -148,7 +146,6 @@ public partial class MasContext : DbContext
             entity.ToTable("Job");
 
             entity.Property(e => e.IdJob)
-                .ValueGeneratedNever()
                 .HasColumnName("idJob");
             entity.Property(e => e.Cost).HasColumnName("cost");
             entity.Property(e => e.End)
@@ -215,7 +212,6 @@ public partial class MasContext : DbContext
             entity.ToTable("Overview");
 
             entity.Property(e => e.IdOverview)
-                .ValueGeneratedNever()
                 .HasColumnName("idOverview");
             entity.Property(e => e.Cost).HasColumnName("cost");
             entity.Property(e => e.IdJob).HasColumnName("idJob");
@@ -233,7 +229,6 @@ public partial class MasContext : DbContext
             entity.ToTable("Painting");
 
             entity.Property(e => e.IdPainting)
-                .ValueGeneratedNever()
                 .HasColumnName("idPainting");
             entity.Property(e => e.Colour)
                 .HasMaxLength(7)
@@ -274,7 +269,6 @@ public partial class MasContext : DbContext
             entity.ToTable("Part");
 
             entity.Property(e => e.IdPart)
-                .ValueGeneratedNever()
                 .HasColumnName("idPart");
             entity.Property(e => e.Cost).HasColumnName("cost");
             entity.Property(e => e.Name)
@@ -290,7 +284,6 @@ public partial class MasContext : DbContext
             entity.ToTable("PartsExchange");
 
             entity.Property(e => e.IdPartsExchange)
-                .ValueGeneratedNever()
                 .HasColumnName("idPartsExchange");
         });
 
@@ -301,7 +294,6 @@ public partial class MasContext : DbContext
             entity.ToTable("Person");
 
             entity.Property(e => e.IdPerson)
-                .ValueGeneratedNever()
                 .HasColumnName("idPerson");
             entity.Property(e => e.FirstName)
                 .HasMaxLength(30)
@@ -347,7 +339,6 @@ public partial class MasContext : DbContext
             entity.ToTable("Service");
 
             entity.Property(e => e.IdService)
-                .ValueGeneratedNever()
                 .HasColumnName("idService");
             entity.Property(e => e.Address)
                 .HasMaxLength(50)
@@ -357,7 +348,7 @@ public partial class MasContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("closing");
             entity.Property(e => e.EmpAmount).HasColumnName("empAmount");
-            /*entity.Property(e => e.MaxEmpAmount).HasColumnName("maxEmpAmount");*/
+            entity.Property(e => e.MaxEmpAmount).HasColumnName("maxEmpAmount");
             entity.Property(e => e.Opening)
                 .HasColumnType("datetime")
                 .HasColumnName("opening");
@@ -374,7 +365,6 @@ public partial class MasContext : DbContext
             entity.ToTable("ServiceActivity");
 
             entity.Property(e => e.IdServiceActivity)
-                .ValueGeneratedNever()
                 .HasColumnName("idServiceActivity");
             entity.Property(e => e.DifficultyLevel).HasColumnName("difficultyLevel");
             entity.Property(e => e.ServiceDate).HasColumnName("serviceDate");
@@ -438,7 +428,7 @@ public partial class MasContext : DbContext
                 .HasColumnType("date")
                 .HasColumnName("internshipStartDate");
             entity.Property(e => e.LengthOfInternship).HasColumnName("lengthOfInternship");
-            /*entity.Property(e => e.Salary).HasColumnName("salary");*/
+            entity.Property(e => e.Salary).HasColumnName("salary");
 
             entity.HasOne(d => d.IdPersonNavigation).WithOne(p => p.Trainee)
                 .HasForeignKey<Trainee>(d => d.IdPerson)

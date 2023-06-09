@@ -53,10 +53,11 @@ public class JobService : IJobService
                 ServiceDate = obj.ServiceDate,
                 Cost = obj.IdOverviewNavigation.Cost
             }).ToList();
-        
+
         var elementIds = _dbContext.Elements
             .Join(_dbContext.PaintingElements, e => e.IdElement, pe => pe.IdElement, (e, pe) => new { e, pe })
-            .Join(_dbContext.Jobs, joinResult => joinResult.pe.IdJob, j => j.IdJob, (joinResult, j) => new { joinResult, j })
+            .Join(_dbContext.Jobs, joinResult => joinResult.pe.IdJob, j => j.IdJob,
+                (joinResult, j) => new { joinResult, j })
             .Where(result => result.j.IdJob == result.joinResult.pe.IdJob)
             .Select(result => result.joinResult.e.IdElement)
             .ToList();
@@ -80,13 +81,14 @@ public class JobService : IJobService
 
         var exchangesIds = _dbContext.Parts
             .Join(_dbContext.Replacements, e => e.IdPart, pe => pe.IdPart, (e, pe) => new { e, pe })
-            .Join(_dbContext.Jobs, joinResult => joinResult.pe.IdJob, j => j.IdJob, (joinResult, j) => new { joinResult, j })
+            .Join(_dbContext.Jobs, joinResult => joinResult.pe.IdJob, j => j.IdJob,
+                (joinResult, j) => new { joinResult, j })
             .Where(result => result.j.IdJob == result.joinResult.pe.IdJob)
             .Select(result => result.joinResult.e.IdPart)
             .ToList();
-        
+
         var exchanges = _dbContext.ServiceActivities
-            .Where(obj => exchangesIds.Contains(obj.IdPartsExchangeNavigation.IdPartsExchange))
+            .Where(obj => elementIds.Contains(obj.IdPartsExchangeNavigation.IdPartsExchange))
             .Where(sa => sa.IdPartsExchangeNavigation.Replacements.Any(j => j.IdJob == job.IdJob))
             .Select(obj => new SomeReplacement()
             {
@@ -100,9 +102,9 @@ public class JobService : IJobService
                         Cost = part.IdPartNavigation.Cost
                     }).ToList()
             }).ToList();
-        
+
         var diagnose = await _dbContext.Diagnoses.FirstOrDefaultAsync(diag => diag.IdJob == job.IdJob);
-        
+
         JobDetails jobDetails = new JobDetails
         {
             IdJob = job.IdJob,
@@ -111,7 +113,7 @@ public class JobService : IJobService
             Cost = job.Cost,
             Status = job.Status,
             Note = job.Note,
-            Diagnose = diagnose.DiagText,
+            /*Diagnose = diagnose.DiagText,*/
             IdCar = job.IdCar,
             IdPerson = job.IdPerson,
             Plates = car.Plates,
@@ -152,7 +154,7 @@ public class JobService : IJobService
 
             _dbContext.Overviews.Add(overview);
             await _dbContext.SaveChangesAsync();
-            
+
             ServiceActivity serviceActivity = new ServiceActivity
             {
                 Name = Overview.OverviewName,
@@ -197,7 +199,7 @@ public class JobService : IJobService
 
             if (jobCreation.ReplacementJobCreation is not null)
             {
-                PartsExchange pe = new PartsExchange {};
+                PartsExchange pe = new PartsExchange { };
                 _dbContext.PartsExchanges.Add(pe);
                 await _dbContext.SaveChangesAsync();
 
@@ -222,8 +224,33 @@ public class JobService : IJobService
                 };
                 _dbContext.ServiceActivities.Add(sa3);
                 await _dbContext.SaveChangesAsync();
-
             }
         }
+    }
+
+    public async Task<bool> ValidateDate(JobCreation jobCreation)
+    {
+        //validate empty objects
+        if (jobCreation.OverviewJobCreation is null
+            && jobCreation.ReplacementJobCreation is null
+            && jobCreation.PaintingJobCreation is null) return false;
+
+        //validate date
+        var date = DateTime.Compare(jobCreation.DateStart, jobCreation.DateEnd);
+        if (date == -1) return false;
+
+        //validate skill
+        List<int> tmp = new List<int>();
+        if (jobCreation.OverviewJobCreation is not null)
+            tmp.Add(jobCreation.OverviewJobCreation.DifficultyLevel);
+        if (jobCreation.PaintingJobCreation is not null)
+            tmp.Add(jobCreation.PaintingJobCreation.DifficultyLevel);
+        if (jobCreation.ReplacementJobCreation is not null)
+            tmp.Add(jobCreation.ReplacementJobCreation.DifficultyLevel);
+        var diff = tmp.Max();
+        var serviceman = await _dbContext.Servicemen.FirstOrDefaultAsync(s => s.IdPerson == jobCreation.idServiceman);
+        if (diff > serviceman.Skills) return false;
+
+        return true;
     }
 }

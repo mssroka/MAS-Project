@@ -10,5 +10,5 @@ public interface IJobService
     Task CreateJob(JobCreation jobCreation);
     Task<IEnumerable<SomeJob>> GetJobs();
     Task<JobDetails> GetJob(int IdJob);
-    
+    public Task<bool>  ValidateDate(JobCreation jobCreation);
 }

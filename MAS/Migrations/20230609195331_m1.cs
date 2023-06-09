@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace MAS.Data.Migrations
+namespace MAS.Migrations
 {
     /// <inheritdoc />
-    public partial class addedNames : Migration
+    public partial class m1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,7 +15,8 @@ namespace MAS.Data.Migrations
                 name: "Element",
                 columns: table => new
                 {
-                    idElement = table.Column<int>(type: "int", nullable: false),
+                    idElement = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     cost = table.Column<int>(type: "int", nullable: false)
                 },
@@ -28,7 +29,8 @@ namespace MAS.Data.Migrations
                 name: "Painting",
                 columns: table => new
                 {
-                    idPainting = table.Column<int>(type: "int", nullable: false),
+                    idPainting = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     colour = table.Column<string>(type: "varchar(7)", unicode: false, maxLength: 7, nullable: false)
                 },
                 constraints: table =>
@@ -40,7 +42,8 @@ namespace MAS.Data.Migrations
                 name: "Part",
                 columns: table => new
                 {
-                    idPart = table.Column<int>(type: "int", nullable: false),
+                    idPart = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
                     cost = table.Column<int>(type: "int", nullable: false)
                 },
@@ -54,6 +57,7 @@ namespace MAS.Data.Migrations
                 columns: table => new
                 {
                     idPartsExchange = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1")
                 },
                 constraints: table =>
                 {
@@ -64,7 +68,8 @@ namespace MAS.Data.Migrations
                 name: "Person",
                 columns: table => new
                 {
-                    idPerson = table.Column<int>(type: "int", nullable: false),
+                    idPerson = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     firstName = table.Column<string>(type: "varchar(30)", unicode: false, maxLength: 30, nullable: false),
                     lastName = table.Column<string>(type: "varchar(30)", unicode: false, maxLength: 30, nullable: false),
                     phoneNumber = table.Column<int>(type: "int", nullable: false)
@@ -78,7 +83,8 @@ namespace MAS.Data.Migrations
                 name: "Service",
                 columns: table => new
                 {
-                    idService = table.Column<int>(type: "int", nullable: false),
+                    idService = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     address = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     maxEmpAmount = table.Column<int>(type: "int", nullable: false),
                     empAmount = table.Column<int>(type: "int", nullable: false),
@@ -188,7 +194,8 @@ namespace MAS.Data.Migrations
                 name: "Car",
                 columns: table => new
                 {
-                    idCar = table.Column<int>(type: "int", nullable: false),
+                    idCar = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     plates = table.Column<string>(type: "varchar(9)", unicode: false, maxLength: 9, nullable: false),
                     brand = table.Column<string>(type: "varchar(30)", unicode: false, maxLength: 30, nullable: false),
                     model = table.Column<string>(type: "varchar(30)", unicode: false, maxLength: 30, nullable: false),
@@ -208,14 +215,15 @@ namespace MAS.Data.Migrations
                 name: "Job",
                 columns: table => new
                 {
-                    idJob = table.Column<int>(type: "int", nullable: false),
+                    idJob = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     start = table.Column<DateTime>(type: "date", nullable: false),
                     end = table.Column<DateTime>(type: "date", nullable: false),
                     cost = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
                     note = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
                     idCar = table.Column<int>(type: "int", nullable: false),
-                    Serviceman_idPerson = table.Column<int>(type: "int", nullable: false)
+                    idPerson = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -227,7 +235,7 @@ namespace MAS.Data.Migrations
                         principalColumn: "idCar");
                     table.ForeignKey(
                         name: "Job_Serviceman",
-                        column: x => x.Serviceman_idPerson,
+                        column: x => x.idPerson,
                         principalTable: "Serviceman",
                         principalColumn: "idPerson");
                 });
@@ -259,7 +267,8 @@ namespace MAS.Data.Migrations
                 name: "Overview",
                 columns: table => new
                 {
-                    idOverview = table.Column<int>(type: "int", nullable: false),
+                    idOverview = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     cost = table.Column<int>(type: "int", nullable: false),
                     idJob = table.Column<int>(type: "int", nullable: false)
                 },
@@ -333,9 +342,11 @@ namespace MAS.Data.Migrations
                 name: "ServiceActivity",
                 columns: table => new
                 {
-                    idServiceActivity = table.Column<int>(type: "int", nullable: false),
+                    idServiceActivity = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     difficultyLevel = table.Column<int>(type: "int", nullable: false),
+                    serviceDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     idOverview = table.Column<int>(type: "int", nullable: true),
                     idPartsExchange = table.Column<int>(type: "int", nullable: true),
                     idPainting = table.Column<int>(type: "int", nullable: true)
@@ -376,9 +387,9 @@ namespace MAS.Data.Migrations
                 column: "idCar");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Job_Serviceman_idPerson",
+                name: "IX_Job_idPerson",
                 table: "Job",
-                column: "Serviceman_idPerson");
+                column: "idPerson");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Manager_idService",

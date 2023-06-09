@@ -19,6 +19,7 @@ builder.Services.AddScoped<ICarService, CarService>();
 builder.Services.AddScoped<IElementService, ElementService>();
 builder.Services.AddScoped<IPartService, PartService>();
 builder.Services.AddScoped<IJobService, JobService>();
+builder.Services.AddScoped<IServicemanService, ServicemanService>();
 
 var app = builder.Build();
 

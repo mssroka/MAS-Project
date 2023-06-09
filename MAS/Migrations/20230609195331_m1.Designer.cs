@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace MAS.Data.Migrations
+namespace MAS.Migrations
 {
     [DbContext(typeof(MasContext))]
-    [Migration("20230607222229_addedNames")]
-    partial class addedNames
+    [Migration("20230609195331_m1")]
+    partial class m1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,8 +28,11 @@ namespace MAS.Data.Migrations
             modelBuilder.Entity("MAS.Data.Car", b =>
                 {
                     b.Property<int>("IdCar")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("idCar");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCar"));
 
                     b.Property<string>("Brand")
                         .IsRequired()
@@ -110,8 +113,11 @@ namespace MAS.Data.Migrations
             modelBuilder.Entity("MAS.Data.Element", b =>
                 {
                     b.Property<int>("IdElement")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("idElement");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdElement"));
 
                     b.Property<int>("Cost")
                         .HasColumnType("int")
@@ -133,8 +139,11 @@ namespace MAS.Data.Migrations
             modelBuilder.Entity("MAS.Data.Job", b =>
                 {
                     b.Property<int>("IdJob")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("idJob");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdJob"));
 
                     b.Property<int>("Cost")
                         .HasColumnType("int")
@@ -148,15 +157,15 @@ namespace MAS.Data.Migrations
                         .HasColumnType("int")
                         .HasColumnName("idCar");
 
+                    b.Property<int>("IdPerson")
+                        .HasColumnType("int")
+                        .HasColumnName("idPerson");
+
                     b.Property<string>("Note")
                         .HasMaxLength(255)
                         .IsUnicode(false)
                         .HasColumnType("varchar(255)")
                         .HasColumnName("note");
-
-                    b.Property<int>("ServicemanIdPerson")
-                        .HasColumnType("int")
-                        .HasColumnName("Serviceman_idPerson");
 
                     b.Property<DateTime>("Start")
                         .HasColumnType("date")
@@ -174,7 +183,7 @@ namespace MAS.Data.Migrations
 
                     b.HasIndex("IdCar");
 
-                    b.HasIndex("ServicemanIdPerson");
+                    b.HasIndex("IdPerson");
 
                     b.ToTable("Job", (string)null);
                 });
@@ -212,8 +221,11 @@ namespace MAS.Data.Migrations
             modelBuilder.Entity("MAS.Data.Overview", b =>
                 {
                     b.Property<int>("IdOverview")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("idOverview");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdOverview"));
 
                     b.Property<int>("Cost")
                         .HasColumnType("int")
@@ -234,8 +246,11 @@ namespace MAS.Data.Migrations
             modelBuilder.Entity("MAS.Data.Painting", b =>
                 {
                     b.Property<int>("IdPainting")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("idPainting");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPainting"));
 
                     b.Property<string>("Colour")
                         .IsRequired()
@@ -277,8 +292,11 @@ namespace MAS.Data.Migrations
             modelBuilder.Entity("MAS.Data.Part", b =>
                 {
                     b.Property<int>("IdPart")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("idPart");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPart"));
 
                     b.Property<int>("Cost")
                         .HasColumnType("int")
@@ -300,8 +318,11 @@ namespace MAS.Data.Migrations
             modelBuilder.Entity("MAS.Data.PartsExchange", b =>
                 {
                     b.Property<int>("IdPartsExchange")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("idPartsExchange");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPartsExchange"));
 
                     b.HasKey("IdPartsExchange")
                         .HasName("PartsExchange_pk");
@@ -312,8 +333,11 @@ namespace MAS.Data.Migrations
             modelBuilder.Entity("MAS.Data.Person", b =>
                 {
                     b.Property<int>("IdPerson")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("idPerson");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPerson"));
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -366,8 +390,11 @@ namespace MAS.Data.Migrations
             modelBuilder.Entity("MAS.Data.Service", b =>
                 {
                     b.Property<int>("IdService")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("idService");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdService"));
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -408,8 +435,11 @@ namespace MAS.Data.Migrations
             modelBuilder.Entity("MAS.Data.ServiceActivity", b =>
                 {
                     b.Property<int>("IdServiceActivity")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("idServiceActivity");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdServiceActivity"));
 
                     b.Property<int>("DifficultyLevel")
                         .HasColumnType("int")
@@ -431,6 +461,10 @@ namespace MAS.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("name");
+
+                    b.Property<DateTime>("ServiceDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("serviceDate");
 
                     b.HasKey("IdServiceActivity")
                         .HasName("ServiceActivity_pk");
@@ -559,7 +593,7 @@ namespace MAS.Data.Migrations
 
                     b.HasOne("MAS.Data.Serviceman", "ServicemanIdPersonNavigation")
                         .WithMany("Jobs")
-                        .HasForeignKey("ServicemanIdPerson")
+                        .HasForeignKey("IdPerson")
                         .IsRequired()
                         .HasConstraintName("Job_Serviceman");
 

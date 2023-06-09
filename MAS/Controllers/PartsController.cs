@@ -21,7 +21,7 @@ public class PartsController : ControllerBase
     }
 
     [HttpGet]
-    [Route("IdPart")]
+    [Route("{IdPart}")]
     public async Task<IActionResult> GetPart(int IdPart)
     {
         return Ok(await _partService.GetPart(IdPart));

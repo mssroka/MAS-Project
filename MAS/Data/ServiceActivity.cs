@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MAS.Data;
 
 public partial class ServiceActivity
 {
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int IdServiceActivity { get; set; }
 
     public string Name { get; set; }

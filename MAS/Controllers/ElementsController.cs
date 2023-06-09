@@ -20,7 +20,7 @@ public class ElementsController : ControllerBase
         return Ok(await _elementService.GetElements());
     }
 
-    [HttpGet("IdElement")]
+    [HttpGet("{IdElement}")]
     public async Task<IActionResult> GetElement(int idElement)
     {
         return Ok(await _elementService.GetElement(idElement));

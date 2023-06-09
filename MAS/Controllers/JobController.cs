@@ -31,10 +31,6 @@ public class JobController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateJob(JobCreation jobCreation)
     {
-        if (jobCreation.OverviewJobCreation is null
-            && jobCreation.ReplacementJobCreation is null
-            && jobCreation.PaintingJobCreation is null)
-            return BadRequest("Empty objects");
         await _jobService.CreateJob(jobCreation);
         return Ok("Job created");
     }

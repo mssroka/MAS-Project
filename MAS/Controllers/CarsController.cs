@@ -21,7 +21,7 @@ public class CarsController : ControllerBase
         return Ok(cars);
     }
 
-    [HttpGet("IdCar")]
+    [HttpGet("{IdCar}")]
     public async Task<IActionResult> GetCar(int IdCar)
     {
         return Ok(await _carService.GetCar(IdCar));

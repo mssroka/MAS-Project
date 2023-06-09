@@ -6,9 +6,8 @@ namespace MAS.Data;
 public partial class Trainee
 {
     public int IdPerson { get; set; }
-
-    public static int Salary { get; set; } = 1000;
-
+    public  int Salary { get; set; }
+    public static int SalaryVal= 2000;
     public DateTime InternshipStartDate { get; set; }
 
     public int LengthOfInternship { get; set; }
