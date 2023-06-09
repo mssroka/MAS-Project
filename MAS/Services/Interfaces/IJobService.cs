@@ -6,9 +6,9 @@ namespace MAS.Services.Interfaces;
 
 public interface IJobService
 {
-    /*
-    Task CreateJob(Job job, List<Overview> overviews, List<Painting> paintings, List<PartsExchange> partsExchanges);
-    */
+    
+    Task CreateJob(JobCreation jobCreation);
     Task<IEnumerable<SomeJob>> GetJobs();
     Task<JobDetails> GetJob(int IdJob);
+    
 }

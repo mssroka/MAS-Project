@@ -7,7 +7,7 @@ public partial class Trainee
 {
     public int IdPerson { get; set; }
 
-    public int Salary { get; set; }
+    public static int Salary { get; set; } = 1000;
 
     public DateTime InternshipStartDate { get; set; }
 

@@ -1,4 +1,5 @@
-﻿using MAS.Services.Interfaces;
+﻿using MAS.Data.DTO;
+using MAS.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MAS.Controllers;
@@ -27,10 +28,14 @@ public class JobController : ControllerBase
         return Ok(await _jobService.GetJob(IdJob));
     }
     
-    /*[HttpPost]
-    public async Task<IActionResult> CreateJob(Job job)
+    [HttpPost]
+    public async Task<IActionResult> CreateJob(JobCreation jobCreation)
     {
-        await _jobService.CreateJob(job);
+        if (jobCreation.OverviewJobCreation is null
+            && jobCreation.ReplacementJobCreation is null
+            && jobCreation.PaintingJobCreation is null)
+            return BadRequest("Empty objects");
+        await _jobService.CreateJob(jobCreation);
         return Ok("Job created");
-    }*/
+    }
 }

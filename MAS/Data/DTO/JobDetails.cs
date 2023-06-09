@@ -11,6 +11,7 @@ public class JobDetails
     public int Cost { get; set; }
     public string Status { get; set; } = null!;
     public string? Note { get; set; }
+    public string? Diagnose { get; set; }
     public int IdCar { get; set; }
     public int IdPerson { get; set; }
     public string Plates { get; set; }

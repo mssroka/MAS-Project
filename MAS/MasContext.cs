@@ -357,7 +357,7 @@ public partial class MasContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("closing");
             entity.Property(e => e.EmpAmount).HasColumnName("empAmount");
-            entity.Property(e => e.MaxEmpAmount).HasColumnName("maxEmpAmount");
+            /*entity.Property(e => e.MaxEmpAmount).HasColumnName("maxEmpAmount");*/
             entity.Property(e => e.Opening)
                 .HasColumnType("datetime")
                 .HasColumnName("opening");
@@ -438,7 +438,7 @@ public partial class MasContext : DbContext
                 .HasColumnType("date")
                 .HasColumnName("internshipStartDate");
             entity.Property(e => e.LengthOfInternship).HasColumnName("lengthOfInternship");
-            entity.Property(e => e.Salary).HasColumnName("salary");
+            /*entity.Property(e => e.Salary).HasColumnName("salary");*/
 
             entity.HasOne(d => d.IdPersonNavigation).WithOne(p => p.Trainee)
                 .HasForeignKey<Trainee>(d => d.IdPerson)

@@ -9,7 +9,7 @@ public partial class Service
 
     public string Address { get; set; } = null!;
 
-    public int MaxEmpAmount { get; set; }
+    public  int MaxEmpAmount { get; set; }
 
     public int EmpAmount { get; set; }
 

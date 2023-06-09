@@ -33,7 +33,7 @@ public class JobService : IJobService
 
     public async Task<JobDetails> GetJob(int IdJob)
     {
-        var job = await _dbContext.Jobs.FirstOrDefaultAsync(job => job.IdJob.Equals(IdJob));
+        var job = await _dbContext.Jobs.FirstOrDefaultAsync(job => job.IdJob == IdJob);
         var car = await _dbContext.Cars.FirstOrDefaultAsync(car => car.IdCar == job.IdCar);
         var person = await _dbContext.People.FirstOrDefaultAsync(person => person.IdPerson == job.IdPerson);
 
@@ -86,7 +86,7 @@ public class JobService : IJobService
             .ToList();
         
         var exchanges = _dbContext.ServiceActivities
-            .Where(obj => elementIds.Contains(obj.IdPartsExchangeNavigation.IdPartsExchange))
+            .Where(obj => exchangesIds.Contains(obj.IdPartsExchangeNavigation.IdPartsExchange))
             .Where(sa => sa.IdPartsExchangeNavigation.Replacements.Any(j => j.IdJob == job.IdJob))
             .Select(obj => new SomeReplacement()
             {
@@ -101,6 +101,8 @@ public class JobService : IJobService
                     }).ToList()
             }).ToList();
         
+        var diagnose = await _dbContext.Diagnoses.FirstOrDefaultAsync(diag => diag.IdJob == job.IdJob);
+        
         JobDetails jobDetails = new JobDetails
         {
             IdJob = job.IdJob,
@@ -109,6 +111,7 @@ public class JobService : IJobService
             Cost = job.Cost,
             Status = job.Status,
             Note = job.Note,
+            Diagnose = diagnose.DiagText,
             IdCar = job.IdCar,
             IdPerson = job.IdPerson,
             Plates = car.Plates,
@@ -123,41 +126,104 @@ public class JobService : IJobService
         return jobDetails;
     }
 
-    /*public async Task CreateJob(Job job, List<Overview> overviews, List<Painting> paintings, List<PartsExchange> partsExchanges)
+    public async Task CreateJob(JobCreation jobCreation)
     {
-        
-        
-        
-        Overview overview = new Overview
+        Job job = new Job
         {
-            
+            Start = jobCreation.DateStart,
+            End = jobCreation.DateEnd,
+            Cost = jobCreation.finalCost,
+            Status = "Created",
+            Note = jobCreation.Note,
+            IdCar = jobCreation.idCar,
+            IdPerson = jobCreation.idServiceman,
         };
-            
-            
-            
-        var finalCost = 0;
-        if (!job.Paintings.IsNullOrEmpty())
-        {
-            foreach (var painting in job.Paintings)
-            {
-                finalCost += painting.Elements.Sum(obj => obj.Cost);
-            }
-        }
 
-        if (!job.PartsExchanges.IsNullOrEmpty())
-        {
-            foreach (var exchange in job.PartsExchanges)
-            {
-                finalCost += exchange.Parts.Sum(obj => obj.Cost);
-            }
-        }
-
-        if (!job.Overviews.IsNullOrEmpty())
-        {
-            finalCost += job.Overviews.Sum(obj => obj.Cost);
-        }
-
-        
+        _dbContext.Jobs.Add(job);
         await _dbContext.SaveChangesAsync();
-    }*/
+
+        if (jobCreation.OverviewJobCreation is not null)
+        {
+            Overview overview = new Overview
+            {
+                Cost = Overview.OverviewCost,
+                IdJob = job.IdJob
+            };
+
+            _dbContext.Overviews.Add(overview);
+            await _dbContext.SaveChangesAsync();
+            
+            ServiceActivity serviceActivity = new ServiceActivity
+            {
+                Name = Overview.OverviewName,
+                DifficultyLevel = jobCreation.OverviewJobCreation.DifficultyLevel,
+                ServiceDate = jobCreation.OverviewJobCreation.ServiceDate,
+                IdOverview = overview.IdOverview
+            };
+            _dbContext.ServiceActivities.Add(serviceActivity);
+            await _dbContext.SaveChangesAsync();
+
+            if (jobCreation.PaintingJobCreation is not null)
+            {
+                Painting painting = new Painting
+                {
+                    Colour = jobCreation.PaintingJobCreation.Colour,
+                };
+                _dbContext.Paintings.Add(painting);
+                await _dbContext.SaveChangesAsync();
+
+                foreach (var ids in jobCreation.PaintingJobCreation.ElementsIds)
+                {
+                    PaintingElement pe = new PaintingElement
+                    {
+                        IdElement = ids,
+                        IdPainting = painting.IdPainting,
+                        IdJob = job.IdJob
+                    };
+                    _dbContext.PaintingElements.Add(pe);
+                    await _dbContext.SaveChangesAsync();
+                }
+
+                ServiceActivity sa2 = new ServiceActivity
+                {
+                    Name = Painting.PaintingName,
+                    DifficultyLevel = jobCreation.PaintingJobCreation.DifficultyLevel,
+                    ServiceDate = jobCreation.PaintingJobCreation.ServiceDate,
+                    IdPainting = painting.IdPainting
+                };
+                _dbContext.ServiceActivities.Add(sa2);
+                await _dbContext.SaveChangesAsync();
+            }
+
+            if (jobCreation.ReplacementJobCreation is not null)
+            {
+                PartsExchange pe = new PartsExchange {};
+                _dbContext.PartsExchanges.Add(pe);
+                await _dbContext.SaveChangesAsync();
+
+                foreach (var ids in jobCreation.ReplacementJobCreation.PartsIds)
+                {
+                    Replacement replacement = new Replacement
+                    {
+                        IdPartsExchange = pe.IdPartsExchange,
+                        IdJob = job.IdJob,
+                        IdPart = ids
+                    };
+                    _dbContext.Replacements.Add(replacement);
+                    await _dbContext.SaveChangesAsync();
+                }
+
+                ServiceActivity sa3 = new ServiceActivity
+                {
+                    Name = PartsExchange.PEName,
+                    DifficultyLevel = jobCreation.ReplacementJobCreation.DifficultyLevel,
+                    ServiceDate = jobCreation.ReplacementJobCreation.ServiceDate,
+                    IdPartsExchange = pe.IdPartsExchange
+                };
+                _dbContext.ServiceActivities.Add(sa3);
+                await _dbContext.SaveChangesAsync();
+
+            }
+        }
+    }
 }
