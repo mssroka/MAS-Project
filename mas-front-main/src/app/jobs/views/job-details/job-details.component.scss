@@ -1,0 +1,49 @@
+@use 'src/mixins' as *;
+
+:host {
+  @apply grid grid-cols-2 flex-1 gap-16 relative;
+
+  @include md {
+    @apply grid-cols-1;
+  }
+}
+
+mat-card-content {
+  @apply flex flex-col;
+}
+
+.activities {
+  @include md {
+    @apply grid-cols-1 gap-y-8 col-span-1;
+  }
+}
+
+mat-card-content {
+  div {
+    @include lg {
+      @apply grid-cols-2;
+    }
+  }
+}
+
+.color {
+  @include lg {
+    @apply col-span-1;
+  }
+}
+
+button {
+  background-color: rgb(240, 213, 213) !important;
+  margin-bottom: 1rem;
+  display: block;
+  margin-left: auto;
+}
+
+.data {
+  @apply col-span-3;
+
+  @include lg {
+    @apply col-span-1;
+  }
+
+}

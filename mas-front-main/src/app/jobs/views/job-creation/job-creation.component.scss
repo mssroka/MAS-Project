@@ -1,0 +1,41 @@
+@use 'src/mixins' as *;
+
+.save-button {
+  background: #F0D5D5 !important;
+}
+
+.main {
+  .note {
+    @include sm {
+      @apply col-span-1;
+    }
+
+    @include md {
+      @apply col-span-1;
+    }
+  }
+
+  @include md {
+    @apply grid-cols-1 gap-x-4;
+  }
+
+  span {
+    @include md {
+      @apply col-start-2;
+    }
+
+    @include sm {
+      @apply col-start-1;
+    }
+  }
+
+  @include lg {
+    @apply gap-x-10
+  }
+}
+
+.activities {
+  @include md {
+    @apply grid-cols-1 gap-y-6;
+  }
+}

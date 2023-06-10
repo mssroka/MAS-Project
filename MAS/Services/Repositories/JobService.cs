@@ -228,7 +228,7 @@ public class JobService : IJobService
         }
     }
 
-    public async Task<bool> ValidateDate(JobCreation jobCreation)
+    public async Task<bool> ValidateJobCreation(JobCreation jobCreation)
     {
         //validate empty objects
         if (jobCreation.OverviewJobCreation is null
@@ -237,7 +237,7 @@ public class JobService : IJobService
 
         //validate date
         var date = DateTime.Compare(jobCreation.DateStart, jobCreation.DateEnd);
-        if (date == -1) return false;
+        if (date != -1) return false;
 
         //validate skill
         List<int> tmp = new List<int>();
@@ -251,6 +251,20 @@ public class JobService : IJobService
         var serviceman = await _dbContext.Servicemen.FirstOrDefaultAsync(s => s.IdPerson == jobCreation.idServiceman);
         if (diff > serviceman.Skills) return false;
 
+        //validate services activity dates
+        if (jobCreation.OverviewJobCreation is not null 
+            && (jobCreation.OverviewJobCreation.ServiceDate < jobCreation.DateStart
+                || jobCreation.OverviewJobCreation.ServiceDate > jobCreation.DateEnd)) 
+                return false;
+        if (jobCreation.PaintingJobCreation is not null 
+            && (jobCreation.PaintingJobCreation.ServiceDate < jobCreation.DateStart
+                || jobCreation.PaintingJobCreation.ServiceDate > jobCreation.DateEnd)) 
+            return false;
+        if (jobCreation.ReplacementJobCreation is not null 
+            && (jobCreation.ReplacementJobCreation.ServiceDate < jobCreation.DateStart
+                || jobCreation.ReplacementJobCreation.ServiceDate > jobCreation.DateEnd)) 
+            return false;
+        
         return true;
     }
 }

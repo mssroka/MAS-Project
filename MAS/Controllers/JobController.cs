@@ -31,7 +31,9 @@ public class JobController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateJob(JobCreation jobCreation)
     {
+        var result = await _jobService.ValidateJobCreation(jobCreation);
+        if (!result) return BadRequest();
         await _jobService.CreateJob(jobCreation);
-        return Ok("Job created");
+        return Ok(new {isSuccess = true});
     }
 }

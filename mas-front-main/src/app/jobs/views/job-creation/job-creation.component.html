@@ -1,0 +1,135 @@
+<div class="flex justify-between">
+  <h1>Job creation</h1>
+
+  <div class="flex gap-x-6">
+    <button mat-stroked-button (click)="cancel()">
+      <mat-icon>close</mat-icon>
+      <span>Cancel</span>
+    </button>
+
+    <button class="save-button" mat-raised-button (click)="save()" [disabled]="canSave">
+      <span>Save</span>
+      <mat-icon>check</mat-icon>
+    </button>
+  </div>
+</div>
+
+<form [formGroup]="formGroup" class="grid grid-cols-4 gap-x-20 main">
+  <mat-form-field>
+    <mat-label>Start Date</mat-label>
+    <input matInput [matDatepicker]="picker1" formControlName="startDate">
+    <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+    <mat-datepicker #picker1></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>End Date</mat-label>
+    <input matInput [matDatepicker]="picker2" formControlName="endDate">
+    <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+    <mat-datepicker #picker2></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Serviceman</mat-label>
+    <mat-select formControlName="serviceManId">
+      <mat-option *ngFor="let man of serviceMans" [value]="man.idPerson">{{man.firstName + ' ' + man.lastName}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Cost</mat-label>
+    <input matInput formControlName="cost">
+  </mat-form-field>
+
+  <mat-form-field class="col-span-2 note">
+    <mat-label>Note</mat-label>
+    <textarea matInput formControlName="note"></textarea>
+  </mat-form-field>
+
+  <span class="col-start-4">Total sum {{sum}}</span>
+</form>
+
+<h1>Activities</h1>
+
+<div class="grid grid-cols-3 gap-x-[10rem] activities">
+  <form [formGroup]="replacementForm" class="flex flex-col">
+    <div class="flex items-center">
+      <span>Replacement</span>
+      <mat-checkbox formControlName="isReplacement"></mat-checkbox>
+    </div>
+
+    <mat-form-field>
+      <mat-select formControlName="parts" multiple>
+        <mat-option *ngFor="let part of parts" [value]="part">{{part.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Service Date</mat-label>
+      <input matInput [matDatepicker]="replacement" formControlName="serviceDate">
+      <mat-datepicker-toggle matIconSuffix [for]="replacement"></mat-datepicker-toggle>
+      <mat-datepicker #replacement></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Difficulty Level</mat-label>
+      <input matInput formControlName="difficultyLevel" type="number" [min]="1" [max]="5">
+      <mat-hint>Difficulty level should be in range of 1 to 5</mat-hint>
+    </mat-form-field>
+
+    <span class="mt-8">Suma {{replacementSum}}</span>
+  </form>
+
+  <form [formGroup]="paintingForm" class="flex flex-col">
+    <div class="flex items-center">
+      <span>Painting</span>
+      <mat-checkbox formControlName="isPainting"></mat-checkbox>
+    </div>
+
+    <mat-form-field>
+      <mat-select formControlName="elements" multiple>
+        <mat-option *ngFor="let element of elements" [value]="element">{{element.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Service Date</mat-label>
+      <input matInput [matDatepicker]="painting" formControlName="serviceDate">
+      <mat-datepicker-toggle matIconSuffix [for]="painting"></mat-datepicker-toggle>
+      <mat-datepicker #painting></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Color</mat-label>
+      <input matInput type="color" formControlName="color">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Difficulty Level</mat-label>
+      <input matInput type="number" formControlName="difficultyLevel" [min]="1" [max]="5">
+      <mat-hint>Difficulty level should be in range of 1 to 5</mat-hint>
+    </mat-form-field>
+
+    <span class="mt-8">Suma {{paintingSum}}</span>
+  </form>
+
+  <form [formGroup]="overviewForm" class="flex flex-col">
+    <div class="flex items-center">
+      <span>Overview</span>
+      <mat-checkbox formControlName="isOverview"></mat-checkbox>
+    </div>
+
+    <mat-form-field>
+      <mat-label>Service Date</mat-label>
+      <input matInput [matDatepicker]="overview" formControlName="serviceDate">
+      <mat-datepicker-toggle matIconSuffix [for]="overview"></mat-datepicker-toggle>
+      <mat-datepicker #overview></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Difficulty Level</mat-label>
+      <input matInput formControlName="difficultyLevel" type="number" [min]="1" [max]="5">
+      <mat-hint>Difficulty level should be in range of 1 to 5</mat-hint>
+    </mat-form-field>
+  </form>
+</div>

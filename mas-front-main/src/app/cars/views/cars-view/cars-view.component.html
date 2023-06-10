@@ -1,0 +1,35 @@
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="cars$">
+    <ng-container matColumnDef="plates">
+      <th mat-header-cell *matHeaderCellDef>Plates</th>
+      <td mat-cell *matCellDef="let element">{{element.plates}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="brand">
+      <th mat-header-cell *matHeaderCellDef>Brand</th>
+      <td mat-cell *matCellDef="let element">{{element.brand}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="model">
+      <th mat-header-cell *matHeaderCellDef>Model</th>
+      <td mat-cell *matCellDef="let element">{{element.model}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="owner">
+      <th mat-header-cell *matHeaderCellDef>Owner credentials</th>
+      <td mat-cell *matCellDef="let element">{{element.firstName + ' ' + element.lastName}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="add">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element" class="button-cell">
+        <button mat-raised-button (click)="navigateToCreation(element.idCar)">
+          <span>Add Job</span>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+  </table>
+</div>

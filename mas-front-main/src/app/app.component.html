@@ -1,0 +1,15 @@
+<mat-toolbar class="flex gap-4">
+  <div class="flex items-center gap-2">
+    <mat-icon>directions_car</mat-icon>
+    <a routerLink="cars" routerLinkActive="active">Cars</a>
+  </div>
+
+  <div class="flex items-center gap-2">
+    <mat-icon>room_service</mat-icon>
+    <a routerLink="jobs" routerLinkActive="active">Jobs</a>
+  </div>
+</mat-toolbar>
+
+<div class="p-12">
+  <router-outlet></router-outlet>
+</div>

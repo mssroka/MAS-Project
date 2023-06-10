@@ -1,0 +1,116 @@
+<mat-progress-spinner *ngIf="(job$ | async) == null" class="absolute top-[50%] left-[50%] col-span-2" [diameter]="70" mode="indeterminate"></mat-progress-spinner>
+
+<mat-card class="mat-elevation-z8" *ngIf="job$ | async as job">
+  <mat-card-header class="text-[2rem] mb-6">Details</mat-card-header>
+  <mat-card-content class="main">
+    <div class="grid grid-cols-4 gap-x-12">
+      <span>Start Date</span>
+      <span class="data">{{job.startDate | date}}</span>
+    </div>
+    <div class="grid grid-cols-4 gap-x-12">
+      <span>End Date</span>
+      <span class="data">{{job.endDate | date}}</span>
+    </div>
+    <div class="grid grid-cols-4 gap-x-12">
+      <span>Cost</span>
+      <span class="data">{{job.cost}}</span>
+    </div>
+    <div class="grid grid-cols-4 gap-x-12">
+      <span>Status</span>
+      <span class="data">{{job.status}}</span>
+    </div>
+    <div class="grid grid-cols-4 gap-x-12">
+      <span>Car</span>
+      <span class="data">{{job.model + ' ' + job.brand + ' ' + job.plates}}</span>
+    </div>
+    <div class="grid grid-cols-4 gap-x-12">
+      <span>Employee</span>
+      <span class="data">{{job.firstName + ' ' + job.lastName}}</span>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="mat-elevation-z8" *ngIf="job$ | async as job">
+  <mat-card-content class="flex flex-col">
+    <mat-form-field>
+      <mat-label>Note</mat-label>
+      <textarea matInput [value]="job.note ?? ''" readonly></textarea>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Diagnose</mat-label>
+      <textarea matInput [value]="job.diagnose ?? ''" readonly></textarea>
+    </mat-form-field>
+  </mat-card-content>
+</mat-card>
+
+<div class="grid grid-cols-3 col-span-2 gap-x-16 activities">
+  <mat-card class="mat-elevation-z8" *ngIf="job$ | async as job">
+    <mat-card-header class="text-[2rem] mb-6">Overview</mat-card-header>
+    <mat-card-content *ngIf="job.overviews.length > 0">
+      <div class="grid grid-cols-2 gap-x-12">
+        <span>Date</span>
+        <span>{{job.overviews[0].serviceDate | date}}</span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-x-12">
+        <span>Cost</span>
+        <span>{{job.overviews[0].cost}}</span>
+      </div>
+    </mat-card-content>
+    <mat-card-content *ngIf="job.overviews.length === 0">
+      <span>No overview</span>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="mat-elevation-z8" *ngIf="job$ | async as job">
+    <mat-card-header class="text-[2rem] mb-6">Replacements</mat-card-header>
+    <mat-card-content *ngIf="job.replacements.length > 0">
+      <div class="grid grid-cols-2 gap-x-8">
+        <span>Date</span>
+        <span>{{job.replacements[0].serviceDate | date}}</span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-x-8">
+        <span>Cost</span>
+        <span>suma</span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-x-8" *ngFor="let part of job.replacements[0].parts">
+        <span>{{part.name}}</span>
+        <span>{{part.cost}}</span>
+      </div>
+    </mat-card-content>
+    <mat-card-content *ngIf="job.replacements.length === 0">
+      <span>No replacement</span>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="mat-elevation-z8" *ngIf="(job$ | async) as job">
+    <mat-card-header class="text-[2rem] mb-6">Paintings</mat-card-header>
+    <mat-card-content *ngIf="job.paintings.length > 0">
+      <div class="grid grid-cols-2 gap-x-12">
+        <span>Date</span>
+        <span>{{job.paintings[0].serviceDate | date}}</span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-x-12">
+        <span>Cost</span>
+        <span>suma</span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-x-12">
+        <span>Colour</span>
+        <span class="color flex items-center gap-x-4">{{job.paintings[0].colour}} <input type="color" [(ngModel)]="job.paintings[0].colour" disabled></span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-x-12" *ngFor="let element of job.paintings[0].elements">
+        <span>{{element.name}}</span>
+        <span>{{element.cost}}</span>
+      </div>
+    </mat-card-content>
+    <mat-card-content *ngIf="job.paintings.length === 0">
+      <span>No painting</span>
+    </mat-card-content>
+  </mat-card>
+</div>
